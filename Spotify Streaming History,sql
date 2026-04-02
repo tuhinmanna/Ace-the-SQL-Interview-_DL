@@ -1,0 +1,17 @@
+with weekly as (
+select user_id ,song_id, count(*) as total 
+from songs_weekly
+where listen_time >= '2022-08-01' and listen_time < '2022-08-05'
+group by 1 ,2
+)
+
+select user_id, song_id, sum(song_plays) as song_plays from 
+
+(select user_id , song_id ,  song_plays
+from songs_history 
+union all
+select user_id , song_id , total as song_plays
+from weekly 
+) t
+group  by 1,2
+order by song_plays desc
